@@ -16,7 +16,7 @@
   		}
   		#container {
   			margin: 0 auto;
-			width: 700px;
+			width: 960px;
 		}
 		h1 { font-size: 3.8em; color: #f45813; margin-bottom: 3px; }
 		h1 .small { font-size: 0.4em; }
@@ -29,10 +29,27 @@
 		pre { background: #000; color: #fff; padding: 15px;}
 		hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
 		.footer { text-align:center; padding-top:30px; font-style: italic; }
+		
+		#left{
+			width: 555px;
+			float: left;
+		}
+		#right{
+			width: 355px;
+			float: right;
+		}
+		#map{
+			height: 400px;
+		}
+		.clear{
+			clear: both;
+			display: block;
+		}
 	</style>
 	
-	<script type="text/javascript" href="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-	<script type="text/javascript" href="js/demo.js"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+	<script type="text/javascript" src="js/demo.js"></script>
 	
 </head>
 
@@ -54,6 +71,12 @@
     <div class="description">
       Just a simple utility to convert GeoJSON objects (Point, LineString, Polygon, MultiPolygon, Feature, FeatureCollection, GeometryCollection) to Google Maps objects (Marker, Polyline, Polygon)
     </div>
+    
+    <div id="left">
+    	<div id="map"></div>
+    </div>
+    <div id="right"></div>
+    <div class="clear"></div>
 
     <h2>Authors</h2>
 <p>Jason Sanford (jasonsanford@gmail.com)<br/><br/>      </p>
