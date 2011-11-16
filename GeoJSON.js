@@ -1,3 +1,4 @@
+var app = {};
 var GeoJSON = function( geojson, options ){
 
 	var _geometryToGoogleMaps = function( geojsonGeometry, opts, geojsonProperties ){
@@ -60,20 +61,27 @@ var GeoJSON = function( geojson, options ){
 				break;
 				
 			case "Polygon":
-				var paths = [];
+				var paths = new google.maps.MVCArray;
+        
 				for (var i = 0; i < geojsonGeometry.coordinates.length; i++){
-					var path = [];
+					var path = new google.maps.MVCArray;
 					for (var j = 0; j < geojsonGeometry.coordinates[i].length; j++){
 						var ll = new google.maps.LatLng(geojsonGeometry.coordinates[i][j][1], geojsonGeometry.coordinates[i][j][0]);
-						path.push(ll)
+						path.insertAt(path.length, ll);
 					}
-					paths.push(path);
+					paths.insertAt(paths.length, path);
 				}
 				opts.paths = paths;
-				googleObj = new google.maps.Polygon(opts);
+				app.googleObj = new google.maps.Polygon(opts);
 				if (geojsonProperties) {
-					googleObj.set("geojsonProperties", geojsonProperties);
+					app.googleObj.set("geojsonProperties", geojsonProperties);
 				}
+				
+				google.maps.event.addListener(map, 'click', function (event) {
+				  var paths = app.googleObj.getPath()
+          paths.insertAt(paths.length, event.latLng);
+        });
+				
 				break;
 				
 			case "MultiPolygon":
@@ -113,7 +121,7 @@ var GeoJSON = function( geojson, options ){
 				googleObj = _error("Invalid GeoJSON object: Geometry object must be one of \"Point\", \"LineString\", \"Polygon\" or \"MultiPolygon\".");
 		}
 		
-		return googleObj;
+		return app.googleObj;
 		
 	};
 	
