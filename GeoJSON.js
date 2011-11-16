@@ -67,11 +67,18 @@ var GeoJSON = function( geojson, options ){
 					var path = new google.maps.MVCArray;
 					for (var j = 0; j < geojsonGeometry.coordinates[i].length; j++){
 						var ll = new google.maps.LatLng(geojsonGeometry.coordinates[i][j][1], geojsonGeometry.coordinates[i][j][0]);
-					
+
 						var marker = new google.maps.Marker({
               position: ll,
               map: map,
-              draggable: true
+              draggable: true,
+              icon: new google.maps.MarkerImage(
+  					          'img/knob.png',
+                      new google.maps.Size(23, 24),
+                      new google.maps.Point(0,0),
+                      new google.maps.Point(12,12)
+              ),
+              shape: {coord: [12,12,12], type: "circle"}
             });
             app.markers.push(marker);
 
