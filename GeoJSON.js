@@ -1,4 +1,4 @@
-var app = {};
+var app = {markers: []};
 var GeoJSON = function( geojson, options ){
 
 	var _geometryToGoogleMaps = function( geojsonGeometry, opts, geojsonProperties ){
@@ -67,6 +67,24 @@ var GeoJSON = function( geojson, options ){
 					var path = new google.maps.MVCArray;
 					for (var j = 0; j < geojsonGeometry.coordinates[i].length; j++){
 						var ll = new google.maps.LatLng(geojsonGeometry.coordinates[i][j][1], geojsonGeometry.coordinates[i][j][0]);
+					
+						var marker = new google.maps.Marker({
+              position: ll,
+              map: map,
+              draggable: true
+            });
+            app.markers.push(marker);
+
+            // capture marker in a closure
+            (function(marker) {
+              google.maps.event.addListener(marker, 'dragend', function() {
+                // set i to the index of the marker that moved
+                for (var i = 0, I = app.markers.length; i < I && app.markers[i] != marker; ++i);
+                
+                path.setAt(i, marker.getPosition());
+              });
+            })(marker)
+                        
 						path.insertAt(path.length, ll);
 					}
 					paths.insertAt(paths.length, path);
