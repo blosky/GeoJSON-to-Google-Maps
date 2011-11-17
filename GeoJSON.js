@@ -1,4 +1,25 @@
 var app = {markers: []};
+
+function serializePolygon(gpoly) {
+  var gjp = {
+		"type": "Polygon",
+		"coordinates": []
+	};
+  for (var i = 0; i < gpoly.latLngs.length; i++) {
+    gjp.coordinates[i] = []
+		var ring = gpoly.latLngs.getAt(i)
+		for (var j = 0; j < ring.length; j++) {
+			var ll = ring.getAt(j)
+			gjp.coordinates[i].push([ll.lng(), ll.lat()])
+  	}
+  }
+  return gjp
+}
+
+function printGeoJSON() {
+  $('#geojson').text(js_beautify(JSON.stringify(serializePolygon(app.googleObj))))
+}
+
 var GeoJSON = function( geojson, options ){
 
 	var _geometryToGoogleMaps = function( geojsonGeometry, opts, geojsonProperties ){
@@ -73,7 +94,7 @@ var GeoJSON = function( geojson, options ){
               map: map,
               draggable: true,
               icon: new google.maps.MarkerImage(
-  					          'img/knob.png',
+                'http://dl.dropbox.com/u/125783/knob.png',
                       new google.maps.Size(23, 24),
                       new google.maps.Point(0,0),
                       new google.maps.Point(12,12)
@@ -89,6 +110,7 @@ var GeoJSON = function( geojson, options ){
                 for (var i = 0, I = app.markers.length; i < I && app.markers[i] != marker; ++i);
                 
                 path.setAt(i, marker.getPosition());
+                printGeoJSON()
               });
             })(marker)
                         
@@ -102,10 +124,12 @@ var GeoJSON = function( geojson, options ){
 					app.googleObj.set("geojsonProperties", geojsonProperties);
 				}
 				
-				google.maps.event.addListener(map, 'click', function (event) {
-				  var paths = app.googleObj.getPath()
-          paths.insertAt(paths.length, event.latLng);
-        });
+				printGeoJSON()
+				
+        // google.maps.event.addListener(map, 'click', function (event) {
+        //   var paths = app.googleObj.getPath()
+        //           paths.insertAt(paths.length, event.latLng);
+        //         });
 				
 				break;
 				
